@@ -1,0 +1,34 @@
+---
+  - name: "Check if JAVA is installed"
+    package:
+      name: "java-1.8.0-openjdk-headless.x86_64"
+      state: latest
+  - name: "Create folder for APP"
+    file:
+      path: /opt/java-project
+      state: directory
+  - name: "Copy java jar file to JAVA-APP project"
+    copy:
+      src: ../car-rental/my-car-renta-spring/target/carrental-0.0.1-SNAPSHOT.jar
+      dest: /opt/java-project
+      remote_src: no
+  - name: "Copy app.service file to server"
+    template:
+      src: app.service
+      dest: /etc/systemd/system
+  - name: "Start application"
+    systemd:
+      name: app.service
+      state: restarted
+  - name: "Install telegraf"
+    yum:
+      name: "{{telegraf_url}}"
+      state: present
+  - name: "Copy telegraf config into server"
+    template:
+      src: telegraf.conf
+      dest: /etc/telegraf/telegraf.conf
+  - name: "Start telegraf"
+    service:
+      name: "telegraf"
+      state: restarted

@@ -1,0 +1,14 @@
+---
+- hosts: proxy_server
+  become: yes
+  roles:
+    - startNginx
+- hosts: app
+  become: yes
+  roles:
+    - application
+- hosts: metrics_store
+  become: yes
+  roles:
+    - startInfluxDB
+    - startGrafana

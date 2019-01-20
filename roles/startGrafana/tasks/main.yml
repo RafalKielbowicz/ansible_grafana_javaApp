@@ -1,0 +1,25 @@
+---
+  - name: "Install grafana"
+    yum:
+      name: "{{grafana_url}}"
+      state: present
+  - name: "Adding grafana configuration to server"
+    template:
+      src: grafana.ini
+      dest: /etc/grafana/grafana.ini
+  - name: "Start grafana"
+    service:
+      name: "grafana-server"
+      state: started
+  - name: "Add influxdb datasource"
+    grafana_datasource:
+      name: "influxdb"
+      grafana_url: "http://127.0.0.1:8080"
+      grafana_user: "admin"
+      grafana_password: "admin"
+      org_id: "1"
+      ds_type: "influxdb"
+      url: "http://{{metrics_store_ip}}:8086"
+      database: "metrics"
+      is_default: yes
+      tls_skip_verify: yes
