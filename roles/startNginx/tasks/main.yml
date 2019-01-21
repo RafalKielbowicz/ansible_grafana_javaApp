@@ -10,7 +10,7 @@
   - name: "Place nginx config with load balancer on server"
     template:
       src: app.conf
-      dest: /etc/nginx/conf.d/app.conf
+      dest: /etc/nginx/nginx.conf
   - name: "Starting nginx service"
     service:
       name: "nginx"

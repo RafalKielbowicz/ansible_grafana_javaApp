@@ -23,3 +23,20 @@
       database: "metrics"
       is_default: yes
       tls_skip_verify: yes
+  - name: "Create grafana dashboard"
+    file:
+      path: /tmp/grafana-dashboard
+      state: directory
+  - name: "Adding grafana configuration to server"
+    template:
+      src: influxdb_rev3.json
+      dest: /tmp/grafana-dashboard
+  - name: "Import Grafana dashboard"
+    grafana_dashboard:
+      grafana_url: "http://127.0.0.1:8080"
+      grafana_user: "admin"
+      grafana_password: "admin"
+      slug: "apache"
+      state: present
+      overwrite: yes
+      path: /tmp/grafana-dashboard/influxdb_rev3.json
